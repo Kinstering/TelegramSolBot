@@ -11,6 +11,7 @@ import aiogram.exceptions as exceptions
 import app.keyboard as kb
 from app.db import Database
 from config import TOKEN
+import solana as sol
 
 
 user_handlers = Router()
@@ -28,6 +29,12 @@ async def cmd_start(message: Message, state: FSMContext):
     welcome_message = 'Welcome to our bot'
 
     if not db.user_exists(user_id):
-        db.add_user(user_id)
+        public_key, private_key = sol.create_wallet()
+        db.add_user(user_id, private_key, public_key)
+
+        # Inform the user about their new wallet
+        welcome_message += f'\n\nYour new Solana wallet has been created.\nPublic Key: `{public_key}`'
+
     await message.answer(welcome_message, parse_mode='Markdown', reply_markup=kb.main)
+
 
