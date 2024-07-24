@@ -16,5 +16,13 @@ class Database:
     def add_user(self, user_id, private_key, public_key):
         with self.connection:
             return self.cursor.execute("INSERT INTO users (user_id, private_key, public_key) VALUES (?, ?, ?)", (user_id, private_key, public_key,))
+        
+    def get_public_key(self, user_id):
+        with self.connection:
+            result = self.cursor.execute('SELECT public_key FROM users WHERE user_id = ?', (user_id,)).fetchone()
+            return result[0] if result else None
 
-    
+    def get_private_key(self, user_id):
+        with self.connection:
+            result = self.cursor.execute('SELECT private_key FROM users WHERE user_id = ?', (user_id,)).fetchone()
+            return result[0] if result else None
