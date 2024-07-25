@@ -11,8 +11,8 @@ import aiogram.exceptions as exceptions
 import app.keyboard as kb
 from app.db import Database
 from config import TOKEN
-import solana as sol
-
+import app.solana as sol
+import app.func as func
 
 user_handlers = Router()
 bot = Bot(token=TOKEN)
@@ -50,10 +50,11 @@ async def cmd_profile(callback: CallbackQuery):
     user_id = callback.from_user.id
     if db.user_exists(user_id):
         public_key = db.get_public_key(user_id)
+        sol_balance = await func.get_sol_balance(public_key)
         profile_message = (
             f'🔑 *Your Solana Wallet Profile*\n\n'
             f'🌟 *Address*: `{public_key}`\n'
-            f'💵 *Balance:* `0.0000000000` SOL'
+            f'💵 *Balance:* `{sol_balance}` SOL\n'
             f'💼 Tap to copy the address and send SOL to deposit.\n'
         )
     else:

@@ -1,6 +1,6 @@
 from solathon import Client, Keypair
 
-client = Client("https://api.testnet.solana.com")
+client = Client("https://api.mainnet-beta.solana.com")
 
 def create_wallet():
     keypair = Keypair()
